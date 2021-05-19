@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+ParkhausClient/dist/js/app.5c632ab1.js
+ParkhausClient/dist/js/app.5c632ab1.js.map
+ParkhausClient/dist/js/chunk-vendors.eea5237c.js
+ParkhausClient/dist/js/chunk-vendors.eea5237c.js.map
