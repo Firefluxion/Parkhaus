@@ -1,3 +1,4 @@
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Configuration;
+using System.Reflection;
 
 namespace Parkhaus
 {
@@ -26,6 +29,13 @@ namespace Parkhaus
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(config =>
+                    config.AddMySql5()
+                    .WithGlobalConnectionString(Configuration.GetConnectionString("ParkhausDB"))
+                    .ScanIn(Assembly.Load("DataLibary, Version = 1.0.0.0, Culture = neutral, PublicKeyToken = null")).For.Migrations())
+                .AddLogging(config => config.AddFluentMigratorConsole());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +55,10 @@ namespace Parkhaus
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+
+            using var scope = app.ApplicationServices.CreateScope();
+            var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
+            migrator.MigrateUp();
         }
     }
 }
