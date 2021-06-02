@@ -1,15 +1,13 @@
 <template>
     <div class="home">
         <h1>{{ msg }}</h1>
-        <p>Welcome to your new single-page application, built with <a href="https://vuejs.org" target="_blank">Vue.js</a>.</p>
-
-        <router-link class="nav-link" to="TestPage">TestPage</router-link>
+        <p>nhgfjhgfjhf</p>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'Home',
+        name: 'Test',
         props: {
             msg: String
         }
