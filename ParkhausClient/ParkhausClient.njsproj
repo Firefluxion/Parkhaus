@@ -35,6 +35,12 @@
     <Content Include="src\components\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="src\components\Test.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\router\index.js">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dist\" />
@@ -42,6 +48,7 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\router\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="babel.config.js" />
