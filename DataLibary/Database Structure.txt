@@ -1,0 +1,33 @@
+﻿Garages
+	-ID
+	-Name
+	-Capacity
+	-ReservedForLongTerm
+	-ShortTermAccessMinThreshold
+	-DisplayOccupiedThreshold
+
+ParkTickets
+	-ID
+	-LicensePlate
+	-Longterm
+
+Arrivals
+	-ID
+	-Time
+
+Exits
+	-ID
+	-Time
+
+TicketArrivals
+	-TicketID
+	-ArrivalID
+
+TicketExits
+	-TicketID
+	-ExitID
+
+Costs
+	-ID
+	-Name
+	-EuroPerHour
