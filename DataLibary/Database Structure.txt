@@ -7,25 +7,18 @@
 	-DisplayOccupiedThreshold
 
 ParkTickets
-	-ID
 	-LicensePlate
 	-Longterm
 
 Arrivals
-	-ID
+	-GarageID
+	-LicensePlate
 	-Time
 
-Exits
-	-ID
+Checkout
+	-GarageID
+	-LicensePlate
 	-Time
-
-TicketArrivals
-	-TicketID
-	-ArrivalID
-
-TicketExits
-	-TicketID
-	-ExitID
 
 Costs
 	-ID

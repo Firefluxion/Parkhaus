@@ -13,9 +13,9 @@ namespace DataLibary.Migrations
         public override void Up()
         {
             Create.Table("ParkTickets")
-                .WithColumn("ID").AsInt32().NotNullable().PrimaryKey().Identity()
-                .WithColumn("LicensePlate").AsString(8).NotNullable()
-                .WithColumn("LongTerm").AsBoolean().NotNullable();
+                .WithColumn("LicensePlate").AsString(8).NotNullable().PrimaryKey()
+                .WithColumn("LongTerm").AsBoolean().NotNullable()
+                .WithColumn("InParkhaus").AsBoolean();
         }
     }
 }

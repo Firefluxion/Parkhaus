@@ -3,11 +3,11 @@ using DataLibary.Models;
 
 namespace DataLibary.BusinessLogic
 {
-    public class GarageProcessor
+    public class GarageProcessor : IGarageProcessor
     {
-        private readonly MySqlDataAccess sqlDataAccess;
+        private readonly ISqlDataAccess sqlDataAccess;
 
-        public GarageProcessor(MySqlDataAccess sqlDataAccess)
+        public GarageProcessor(ISqlDataAccess sqlDataAccess)
         {
             this.sqlDataAccess = sqlDataAccess;
         }
@@ -29,7 +29,7 @@ namespace DataLibary.BusinessLogic
             return sqlDataAccess.SaveData(sql, garage);
         }
 
-        public GarageModel LoadGarageByName(string name)
+        public GarageModel LoadGarageByName(string name = "DefaultGarage")
         {
             GarageModel garage = new GarageModel { Name = name }
             ;

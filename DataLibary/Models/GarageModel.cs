@@ -1,4 +1,6 @@
-﻿namespace DataLibary.Models
+﻿using System.Collections.Generic;
+
+namespace DataLibary.Models
 {
     public class GarageModel
     {

@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using Parkhaus.Controllers;
+using DataLibary.DataAccess;
+using DataLibary.BusinessLogic;
 
 namespace Parkhaus
 {
@@ -25,6 +28,11 @@ namespace Parkhaus
 
             services.Configure<DatabaseSettings>(Configuration)
                 .AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+
+            services.AddSingleton<WeatherForecastController>();
+            services.AddTransient<ISqlDataAccess, MySqlDataAccess>();
+            services.AddTransient<IGarageProcessor, GarageProcessor>();
+            services.AddTransient<IParkTicketProcessor, ParkTicketProcessor>();
 
             services.AddFluentMigratorCore()
                 .ConfigureRunner(config =>
@@ -54,6 +62,7 @@ namespace Parkhaus
 
             using var scope = app.ApplicationServices.CreateScope();
             var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
+            migrator.MigrateDown(0);
             migrator.MigrateUp();
         }
     }

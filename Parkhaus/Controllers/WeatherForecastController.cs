@@ -1,10 +1,12 @@
 ﻿using DataLibary.BusinessLogic;
 using DataLibary.DataAccess;
+using DataLibary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Parkhaus.Controllers
 {
@@ -18,18 +20,39 @@ namespace Parkhaus.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly DatabaseSettings databaseSettings;
+        private readonly IGarageProcessor garageProcessor;
+        private readonly IParkTicketProcessor parkTicketProcessor;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, DatabaseSettings databaseSettings)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IGarageProcessor garageProcessor, IParkTicketProcessor parkTicketProcessor)
         {
             _logger = logger;
-            this.databaseSettings = databaseSettings;
+            this.garageProcessor = garageProcessor;
+            this.parkTicketProcessor = parkTicketProcessor;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            DataLibary.Models.GarageModel x = new GarageProcessor(new MySqlDataAccess(databaseSettings)).LoadGarageByName("DefaultGarage");
+            GarageModel garage = garageProcessor.LoadGarageByName("DefaultGarage");
+
+            parkTicketProcessor.CreateLongTermParkTicket("LT");
+            parkTicketProcessor.CheckIn(garage, "LT");
+            Thread.Sleep(1000);
+            parkTicketProcessor.CheckOut(garage, "LT");
+            parkTicketProcessor.CheckIn(garage, "LT");
+
+            parkTicketProcessor.CheckIn(garage, "ST1");
+            //parkTicketProcessor.CheckOut(garage, "ST1");
+            Thread.Sleep(1000);
+
+            parkTicketProcessor.CheckOut(garage, "LT");
+            parkTicketProcessor.CheckIn(garage, "LT");
+            Thread.Sleep(1000);
+
+            parkTicketProcessor.CheckOut(garage, "LT");
+            //parkTicketProcessor.DeleteLongTermParkTicket("LT");
+
+
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast {
