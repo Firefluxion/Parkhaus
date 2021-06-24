@@ -29,7 +29,7 @@ namespace DataLibary.DataAccess
             }
         }
 
-        public T LoadData<T>(string sql, T data)
+        public T LoadData<T>(string sql, object data)
         {
             using (IDbConnection cnn = new MySqlConnection(GetConnectionString()))
             {

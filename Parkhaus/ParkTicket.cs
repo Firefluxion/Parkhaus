@@ -2,7 +2,7 @@
 
 namespace Parkhaus
 {
-    public interface IParkTicket
+    public class ParkTicket : IParkTicket
     {
         public string LicensePlate { get; set; }
 

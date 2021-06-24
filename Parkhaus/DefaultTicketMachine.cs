@@ -1,9 +1,6 @@
 ﻿using DataLibary.BusinessLogic;
 using DataLibary.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Parkhaus
 {
@@ -18,40 +15,95 @@ namespace Parkhaus
             this.parkTicketProcessor = parkTicketProcessor;
         }
 
-        public int? CalculatedParkingSpaces => throw new NotImplementedException();
-
-        public bool CheckInLongTerm(string licensePlate)
+        public int? FreeParkingSpaces 
         {
-            if (parkTicketProcessor.OccupiedParkingSpaces(null) <= defaultGarage.Capacity)
+            get
             {
-                return false;
+                int freeSpaces = defaultGarage.SpacesForShortTerm - parkTicketProcessor.OccupiedParkingSpaces(false);
+
+                int occupiedLongTermSpaces = parkTicketProcessor.OccupiedParkingSpaces(true);
+                if (occupiedLongTermSpaces > defaultGarage.ReservedForLongTerm)
+                {
+                    freeSpaces -= (occupiedLongTermSpaces - defaultGarage.ReservedForLongTerm);
+                }
+
+                if ( freeSpaces < defaultGarage.ShortTermAccessMinThreshold)
+                {
+                    return null;
+                }
+
+                return freeSpaces;
+            }
+        }
+
+        public IParkTicket CheckInLongTerm(string licensePlate)
+        {
+            int freeSpaces = defaultGarage.Capacity - parkTicketProcessor.OccupiedParkingSpaces(null);
+
+            if (freeSpaces <= 0)
+            {
+                return null;
             }
 
-            parkTicketProcessor.CheckIn(defaultGarage, licensePlate);
+            parkTicketProcessor.CheckInLongTerm(defaultGarage, licensePlate);
             
-            return true;
+            return new ParkTicket {
+                LicensePlate = licensePlate,
+                ArrivalTime = parkTicketProcessor.GetRecentLongTermTermArrivalTime(licensePlate),
+                PricePerHour = parkTicketProcessor.GetLongTermPricePerHour(),
+            };
         }
 
-        public bool CheckInShortTerm(string licensePlate)
+        public IParkTicket CheckInShortTerm(string licensePlate)
         {
-            if (parkTicketProcessor.OccupiedParkingSpaces(null) <= defaultGarage.ShortTermAccessMinThreshold)
+            int freeSpaces = defaultGarage.SpacesForShortTerm - parkTicketProcessor.OccupiedParkingSpaces(false);
+
+            int occupiedLongTermSpaces = parkTicketProcessor.OccupiedParkingSpaces(true);
+            if (occupiedLongTermSpaces > defaultGarage.ReservedForLongTerm)
             {
-                return false;
+                freeSpaces -= (occupiedLongTermSpaces - defaultGarage.ReservedForLongTerm);
             }
 
-            parkTicketProcessor.CheckIn(defaultGarage, licensePlate);
+            if (freeSpaces <= defaultGarage.ShortTermAccessMinThreshold)
+            {
+                return null;
+            }
 
-            return true;
+            parkTicketProcessor.CheckInShortTerm(defaultGarage, licensePlate);
+
+            return new ParkTicket {
+                LicensePlate = licensePlate,
+                ArrivalTime = parkTicketProcessor.GetShortTermArrivalTime(licensePlate),
+                PricePerHour = parkTicketProcessor.GetShortTermPricePerHour(),
+            };
         }
 
-        public void CheckOutLongTerm(string licensePlate)
+        public void CheckOutLongTerm(IParkTicket ticket)
         {
-            throw new NotImplementedException();
+            parkTicketProcessor.CheckOut(defaultGarage, ticket.LicensePlate, ticket.CheckoutTime);
         }
 
-        public IParkTicket CheckOutShortTerm(string licensePlate)
+        public void ConfirmBilling(IParkTicket ticket)
         {
-            throw new NotImplementedException();
+            parkTicketProcessor.CheckOut(defaultGarage, ticket.LicensePlate, ticket.CheckoutTime);
+            parkTicketProcessor.DeleteParkTicket(ticket.LicensePlate);
+        }
+
+        public IParkTicket GetParkTicketPreview(string licensePlate)
+        {
+            bool longTerm = parkTicketProcessor.ParkTicketIsLongTerm(licensePlate);
+            DateTime arrival = longTerm ? parkTicketProcessor.GetRecentLongTermTermArrivalTime(licensePlate) : parkTicketProcessor.GetShortTermArrivalTime(licensePlate);
+            DateTime checkout = DateTime.Now;
+
+            return new ParkTicket() {
+                LicensePlate = licensePlate,
+                LongTerm = longTerm,
+                ArrivalTime = arrival,
+                CheckoutTime = checkout,
+                DeductedTime = parkTicketProcessor.CalculateDeductedTime(arrival, checkout),
+                PricePerHour = longTerm ? parkTicketProcessor.GetLongTermPricePerHour() : parkTicketProcessor.GetShortTermPricePerHour(),
+                Price = longTerm? parkTicketProcessor.CalculateLongTermTicketPrice(licensePlate, checkout) : parkTicketProcessor.CalculateShortTermTicketPrice(licensePlate, checkout),
+            };
         }
     }
 }

@@ -37,7 +37,7 @@ namespace DataLibary.BusinessLogic
                            from Garages
                            where Name = @Name;";
 
-            return sqlDataAccess.LoadData(sql, garage);
+            return sqlDataAccess.LoadData<GarageModel>(sql, garage);
         }
     }
 }

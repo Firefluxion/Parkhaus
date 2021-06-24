@@ -33,6 +33,7 @@ namespace Parkhaus
             services.AddTransient<ISqlDataAccess, MySqlDataAccess>();
             services.AddTransient<IGarageProcessor, GarageProcessor>();
             services.AddTransient<IParkTicketProcessor, ParkTicketProcessor>();
+            services.AddTransient<ITicketMachine, DefaultTicketMachine>();
 
             services.AddFluentMigratorCore()
                 .ConfigureRunner(config =>

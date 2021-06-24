@@ -7,7 +7,5 @@ namespace DataLibary.Models
     {
         public string LicensePlate { get; set; }
         public bool LongTerm { get; set; }
-        public List<DateTime> Arrivals { get; set; }
-        public List<DateTime> Exits { get; set; }
     }
 }

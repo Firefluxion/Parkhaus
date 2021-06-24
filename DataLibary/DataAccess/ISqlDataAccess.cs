@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DataLibary.DataAccess
 {
@@ -7,7 +8,7 @@ namespace DataLibary.DataAccess
         int CheckData<T>(string sql, T data);
         string GetConnectionString();
         List<T> LoadData<T>(string sql);
-        T LoadData<T>(string sql, T data);
+        T LoadData<T>(string sql, object data);
         int SaveData<T>(string sql, T data);
     }
 }

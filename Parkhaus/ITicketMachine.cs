@@ -1,18 +1,20 @@
 ﻿namespace Parkhaus
 {
-    interface ITicketMachine
+    public interface ITicketMachine
     {
         /// <summary>
         /// null == besetzt
         /// </summary>
-        public int? CalculatedParkingSpaces { get; }
+        public int? FreeParkingSpaces { get; }
 
-        bool CheckInShortTerm(string licensePlate);
+        IParkTicket CheckInShortTerm(string licensePlate);
 
-        bool CheckInLongTerm(string licensePlate);
+        IParkTicket CheckInLongTerm(string licensePlate);
 
-        void CheckOutLongTerm(string licensePlate);
+        void CheckOutLongTerm(IParkTicket ticket);
 
-        IParkTicket CheckOutShortTerm(string licensePlate);
+        IParkTicket GetParkTicketPreview(string licensePlate);
+
+        void ConfirmBilling(IParkTicket ticket);
     }
 }

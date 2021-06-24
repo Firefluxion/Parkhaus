@@ -20,37 +20,42 @@ namespace Parkhaus.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IGarageProcessor garageProcessor;
-        private readonly IParkTicketProcessor parkTicketProcessor;
+        private readonly ITicketMachine ticketMachine;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IGarageProcessor garageProcessor, IParkTicketProcessor parkTicketProcessor)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ITicketMachine ticketMachine)
         {
             _logger = logger;
-            this.garageProcessor = garageProcessor;
-            this.parkTicketProcessor = parkTicketProcessor;
+            this.ticketMachine = ticketMachine;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            GarageModel garage = garageProcessor.LoadGarageByName("DefaultGarage");
+            var before = ticketMachine.FreeParkingSpaces;
+            for (int i = 0; i < 150; i++)
+            {
+                var between = ticketMachine.FreeParkingSpaces;
+                IParkTicket parkTicketI = ticketMachine.CheckInShortTerm("ST" + i);
+            }
 
-            parkTicketProcessor.CreateLongTermParkTicket("LT");
-            parkTicketProcessor.CheckIn(garage, "LT");
-            Thread.Sleep(1000);
-            parkTicketProcessor.CheckOut(garage, "LT");
-            parkTicketProcessor.CheckIn(garage, "LT");
+            for (int i = 0; i < 50; i++)
+            {
+                var between = ticketMachine.FreeParkingSpaces;
+                ticketMachine.CheckInLongTerm("LT" + i);
+            }
 
-            parkTicketProcessor.CheckIn(garage, "ST1");
-            //parkTicketProcessor.CheckOut(garage, "ST1");
-            Thread.Sleep(1000);
+            ticketMachine.CheckInLongTerm("LT1");
+            IParkTicket preview = ticketMachine.GetParkTicketPreview("LT1");
+            ticketMachine.CheckOutLongTerm(preview);
 
-            parkTicketProcessor.CheckOut(garage, "LT");
-            parkTicketProcessor.CheckIn(garage, "LT");
-            Thread.Sleep(1000);
+            IParkTicket parkTicket = ticketMachine.GetParkTicketPreview("ST1");
+            ticketMachine.ConfirmBilling(parkTicket);
+            var after = ticketMachine.FreeParkingSpaces;
 
-            parkTicketProcessor.CheckOut(garage, "LT");
-            //parkTicketProcessor.DeleteLongTermParkTicket("LT");
+            ticketMachine.CheckInLongTerm("LT1");
+            preview = ticketMachine.GetParkTicketPreview("LT1");
+            ticketMachine.CheckOutLongTerm(preview);
+
 
 
 
