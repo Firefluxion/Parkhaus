@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace DataLibary.DataAccess
 {
-    public class MySqlDataAccess
+    public class MySqlDataAccess : ISqlDataAccess
     {
         private readonly DatabaseSettings databaseSettings;
 
@@ -29,7 +29,7 @@ namespace DataLibary.DataAccess
             }
         }
 
-        public T LoadData<T>(string sql, T data)
+        public T LoadData<T>(string sql, object data)
         {
             using (IDbConnection cnn = new MySqlConnection(GetConnectionString()))
             {
@@ -42,6 +42,14 @@ namespace DataLibary.DataAccess
             using (IDbConnection cnn = new MySqlConnection(GetConnectionString()))
             {
                 return cnn.Execute(sql, data);
+            }
+        }
+
+        public int CheckData<T>(string sql, T data)
+        {
+            using (IDbConnection cnn = new MySqlConnection(GetConnectionString()))
+            {
+                return cnn.ExecuteScalar<int>(sql, data);
             }
         }
     }

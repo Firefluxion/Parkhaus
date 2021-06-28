@@ -1,10 +1,12 @@
 ﻿using DataLibary.BusinessLogic;
 using DataLibary.DataAccess;
+using DataLibary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Parkhaus.Controllers
 {
@@ -18,18 +20,44 @@ namespace Parkhaus.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly DatabaseSettings databaseSettings;
+        private readonly ITicketMachine ticketMachine;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, DatabaseSettings databaseSettings)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ITicketMachine ticketMachine)
         {
             _logger = logger;
-            this.databaseSettings = databaseSettings;
+            this.ticketMachine = ticketMachine;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            DataLibary.Models.GarageModel x = new GarageProcessor(new MySqlDataAccess(databaseSettings)).LoadGarageByName("DefaultGarage");
+            var before = ticketMachine.FreeParkingSpaces;
+            for (int i = 0; i < 150; i++)
+            {
+                var between = ticketMachine.FreeParkingSpaces;
+                IParkTicket parkTicketI = ticketMachine.CheckInShortTerm("ST" + i);
+            }
+
+            for (int i = 0; i < 50; i++)
+            {
+                var between = ticketMachine.FreeParkingSpaces;
+                ticketMachine.CheckInLongTerm("LT" + i);
+            }
+
+            ticketMachine.CheckInLongTerm("LT1");
+            IParkTicket preview = ticketMachine.GetParkTicketPreview("LT1");
+            ticketMachine.CheckOutLongTerm(preview);
+
+            IParkTicket parkTicket = ticketMachine.GetParkTicketPreview("ST1");
+            ticketMachine.ConfirmBilling(parkTicket);
+            var after = ticketMachine.FreeParkingSpaces;
+
+            ticketMachine.CheckInLongTerm("LT1");
+            preview = ticketMachine.GetParkTicketPreview("LT1");
+            ticketMachine.CheckOutLongTerm(preview);
+
+
+
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast {

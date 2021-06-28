@@ -1,4 +1,6 @@
-﻿namespace DataLibary.Models
+﻿using System.Collections.Generic;
+
+namespace DataLibary.Models
 {
     public class GarageModel
     {
@@ -8,5 +10,7 @@
         public int ReservedForLongTerm { get; set; }
         public int ShortTermAccessMinThreshold { get; set; }
         public int DisplayOccupiedThreshold { get; set; }
+
+        public int SpacesForShortTerm { get { return Capacity - ReservedForLongTerm; } }  
     }
 }

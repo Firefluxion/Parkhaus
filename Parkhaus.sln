@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parkhaus", "Parkhaus\Parkha
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ParkhausClient", "ParkhausClient\ParkhausClient.njsproj", "{D61D585D-22D7-4F4C-BC55-55E854968B8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibary", "DataLibary\DataLibary.csproj", "{90931AAD-FD33-437F-9DE4-B2EE46B07E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLibary", "DataLibary\DataLibary.csproj", "{90931AAD-FD33-437F-9DE4-B2EE46B07E59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dokumentation", "Dokumentation", "{B578CA24-FC4F-4433-A2AD-6610B8F6239A}"
+	ProjectSection(SolutionItems) = preProject
+		Aufteilung.txt = Aufteilung.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
