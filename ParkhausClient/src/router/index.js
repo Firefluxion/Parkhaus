@@ -6,6 +6,7 @@ import TestPage from '../components/Test.vue'
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [
         { path: '/', component: HomePage },
         { path: '/TestPage', component: TestPage },
