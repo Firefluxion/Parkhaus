@@ -8,6 +8,10 @@
 </template>
 
 <script>
+
+    import { GarageService } from "@/services/api/garage.service.js";
+    GarageService.test();
+
     export default {
         name: 'Home',
         props: {

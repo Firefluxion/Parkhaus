@@ -32,10 +32,13 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
-    <Content Include="src\components\Home.vue" />
+    <Content Include="src\services\api\garage.service.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\views\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="src\components\Test.vue">
+    <Content Include="src\views\Test.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="src\router\index.js">
@@ -48,6 +51,9 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\services\" />
+    <Folder Include="src\services\api\" />
+    <Folder Include="src\views\" />
     <Folder Include="src\router\" />
   </ItemGroup>
   <ItemGroup>

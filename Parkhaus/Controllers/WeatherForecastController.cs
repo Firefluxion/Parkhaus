@@ -67,5 +67,11 @@ namespace Parkhaus.Controllers
             })
             .ToArray();
         }
+
+        [HttpPost]
+        public IActionResult Test(int id)
+        {
+            return Ok();
+        }
     }
 }

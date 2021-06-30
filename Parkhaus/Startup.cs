@@ -63,7 +63,7 @@ namespace Parkhaus
 
             using var scope = app.ApplicationServices.CreateScope();
             var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
-            migrator.MigrateDown(0);
+            //migrator.MigrateDown(0);
             migrator.MigrateUp();
         }
     }
