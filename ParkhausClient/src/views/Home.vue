@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <h1>{{ msg }}</h1>
+        <h1>Home</h1>
         <p>Welcome to your new single-page application, built with <a href="https://vuejs.org" target="_blank">Vue.js</a>.</p>
 
         <router-link class="nav-link" to="TestPage">TestPage</router-link>
@@ -11,7 +11,6 @@
     export default {
         name: 'Home',
         props: {
-            msg: String
         }
     };
 </script>
